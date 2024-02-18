@@ -8,8 +8,8 @@
 
 # Objetivos do trabalho
 
--Construir um website com a lista das ruas na página principal;
--Contruir a página de cada rua e liga-la à página principal (devem incluir toda a informação, fotos inclusive).
+- Construir um website com a lista das ruas na página principal;
+- Contruir a página de cada rua e liga-la à página principal (devem incluir toda a informação, fotos inclusive).
 
 
 # Resumo do trabalho
