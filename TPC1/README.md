@@ -15,8 +15,10 @@
 # Resumo do trabalho
 Para realizar esta tarefa decidi usar Python de forma a desenvolver scripts para automatizar a criação das páginas.
 
+- **Página Principal:**
 De forma a criar a páginal principal, comecei por definir o folder onde estão armazenados os arquivos XML e as imagens atuais das ruas de Braga. Em seguida, percorri os arquivos XML para extrair informações relevantes, como o nome e o número das ruas, e selecionei as imagens correspondentes. Com esses dados, construí uma página HTML que serve como índice para o site das ruas de Braga, adicionando links para cada rua. Além disso, as imagens foram inseridas em dropdowns, permitindo aos usuários visualizá-las ao passar o rato sobre os nomes das ruas. Para finalizar esta parte do TCP, guardei a página HTML num ficheiro denominado index.html, dentro de uma pasta denominada ruas_site.
 
+- **Página de Rua:**
 Para implementar a página de cada rua, é necessário basear-nos nos arquivos XML que nos foram dados e que contêm as informações que devem ser apresentadas para cada rua. Para isto comecei por percorrer os arquivos XML de forma a extrair estes dados importantes, como o nome e o número de cada rua, bem como as informações sobre as imagens e as casas associadas a elas. Em seguida, utilizo estas informações para gerar páginas HTML personalizadas para cada rua, com descrições detalhadas, imagens, e uma tabela com os detalhes das casas, incluindo número, vista, enfiteuta, foro e descrição. As páginas HTML resultantes são então guardadas individualmente em ficheiros dentro da pasta ruas_site, sendo o nome dos ficheiros baseados no nome das ruas.
 
 
