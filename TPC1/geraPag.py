@@ -170,11 +170,8 @@ for fileXML in filesXML:
     """
 
 
-
     pagHTML = preHTML + conteudo + posHTML
     fds = "ruas_site/" + nomeRua.lower().replace(" ","") + ".html"
     f = open(fds,"w")
     f.write(pagHTML)
     f.close()
-
-
