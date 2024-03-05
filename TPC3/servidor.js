@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var axios = require('axios');
-const { error } = require('console');
+const { title } = require('process');
 
 
 var preHTMLIndex = `
@@ -37,7 +37,7 @@ var pagInicial = preHTMLIndex +
         <div class="w3-container" style="max-width:500px;">
             <ul class="w3-ul w3-border w3-hoverable">
                 <li><a href="/filmes">Filmes</a></li>
-                <li><a href="/genero">Género</a></li>
+                <li><a href="/generos">Género</a></li>
                 <li><a href="/atores">Atores</a></li>
             </ul>
         </div>
@@ -68,13 +68,265 @@ function createFilmesIndex(dados){
             </div>
     `
     + postHTMLIndex
+
+    return pagHTML
 };
 
+
+
+function createAtoresIndex(dados){
+
+    pagHTML = preHTMLIndex + 
+    `
+            <header class="w3-container w3-theme-red">
+                <h3>Atores</h3>
+            </header>
+            <div class="w3-container" style="max-width:500px;">
+                <ul class="w3-ul w3-border w3-hoverable">
+          
+    `
+    dados.forEach(elem => {
+        pagHTML += `
+                    <li><a href="/atores/${elem.id}">${elem.name}</a></li>
+        `
+    });
+
+    pagHTML += 
+    `
+                </ul>
+            </div>
+    `
+    + postHTMLIndex
+
+    return pagHTML
+};
+
+
+
+function createGenerosIndex(dados){
+    pagHTML = preHTMLIndex + 
+    `
+            <header class="w3-container w3-theme-red">
+                <h3>Gêneros</h3>
+            </header>
+            <div class="w3-container" style="max-width:500px;">
+                <ul class="w3-ul w3-border w3-hoverable">
+          
+    `
+    dados.forEach(elem => {
+        pagHTML += `
+                    <li><a href="/generos/${elem.id}">${elem.genre}</a></li>
+        `
+    });
+
+    pagHTML += 
+    `
+                </ul>
+            </div>
+    `
+    + postHTMLIndex
+
+    return pagHTML
+};
+
+
+
+function createFilm(dados, dadosCast, dadosGenre){
+    
+    pagHTML =
+`
+<!DOCTYPE html>
+<html>
+<body>
+    <head>
+        <title>${dados.title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="w3.css">
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+`
+
+
+pagHTML +=
+`
+            <div class="w3-container w3-padding-16">
+                <h1 class="w3-text-teal">${dados.title}</h1>
+                <div class="w3-panel">
+                    <p><strong>Ano:</strong> ${dados.year}</p>
+                    <p><strong>Elenco:</strong></p>
+                    <div class="w3-container" style="max-width:500px;">
+                        <ul class="w3-ul w3-border w3-hoverable">
+`
+
+if (dados.cast != undefined){
+    dados.cast.forEach(elem => {
+        var ator = dadosCast.find(ator => ator.name == elem)
+        pagHTML += `
+                            <li><a href="/cast/${ator.id}">${ator.name}</a></li>
+        `
+    });
+}
+
+pagHTML +=
+`
+                        </ul>
+                    </div>
+                    <p><strong>Gênero:</strong></p>
+                    <div class="w3-container" style="max-width:500px;">
+                        <ul class="w3-ul w3-border w3-hoverable">
+
+`
+
+if (dados.genre != undefined){
+    dados.genre.forEach(elem => {
+        var genre = dadosGenre.find(genero => genero.name == elem)
+        pagHTML += `
+                            <li><a href="/generos/${genre.id}">${genre.genre}</a></li>
+        `
+    });
+}
+
+
+    pagHTML +=
+`
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </body>
+</body>
+</html> 
+`
+
+    return pagHTML
+}
+
+
+
+function createAtor(dados, dadosFilmes){
+    
+    pagHTML =
+`
+<!DOCTYPE html>
+<html>
+<body>
+    <head>
+        <title>${dados.name}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="w3.css">
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+`
+
+
+pagHTML +=
+`
+            <div class="w3-container w3-padding-16">
+                <h1 class="w3-text-teal">${dados.name}</h1>
+                <div class="w3-panel">
+                <p><strong>Filmes:</strong></p>
+                    <div class="w3-container" style="max-width:500px;">
+                        <ul class="w3-ul w3-border w3-hoverable">
+`
+
+dadosFilmes.forEach(filme => {
+    if (filme.cast != undefined){
+        if (filme.cast.includes(dados.name)){
+            pagHTML += `
+                            <li><a href="/filmes/${filme.id}">${filme.title}</a></li>
+            `
+        }
+    }
+});
+
+
+
+    pagHTML +=
+`
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </body>
+</body>
+</html> 
+`
+
+    return pagHTML
+}
+
+
+
+
+function createGenero(dados, dadosFilmes){
+    
+    pagHTML =
+`
+<!DOCTYPE html>
+<html>
+<body>
+    <head>
+        <title>${dados.genre}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="w3.css">
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+`
+
+
+pagHTML +=
+`
+            <div class="w3-container w3-padding-16">
+                <h1 class="w3-text-teal">${dados.genre}</h1>
+                <div class="w3-panel">
+                    <p><strong>Filmes:</strong></p>
+                    <div class="w3-container" style="max-width:500px;">
+                        <ul class="w3-ul w3-border w3-hoverable">
+`
+
+dadosFilmes.forEach(filme => {
+    if (filme.genres != undefined){
+        if (filme.genres.includes(dados.genre)){
+            pagHTML += `
+                            <li><a href="/filmes/${filme.id}">${filme.title}</a></li>
+            `
+        }
+    }
+});
+
+if (dados.cast != undefined){
+
+}
+
+    pagHTML +=
+`
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </body>
+</body>
+</html> 
+`
+
+    return pagHTML
+}
+
+
+
+
 http.createServer(function (req,res){
+    var filmexp = /\/filmes\/\w+$/
+    var atorexp = /\/atores\/\d+$/
+    var genreexp = /\/generos\/\d+$/
+    var cssexp = /\/w3.css$/
     console.log(req.method + ' ' + req.url)
     var q = url.parse(req.url, true)
     console.log(q.pathname)
-    if(q.pathname == '/w3.css'){
+    if((cssexp.test(q.pathname))){
         fs.readFile('w3.css', function(erro, data){
             res.writeHead(200, {'Content-Type': 'text/css'})
             res.write(data)
@@ -98,6 +350,88 @@ http.createServer(function (req,res){
         .catch(function(error){
             console.log(error)
         })
+    }
+    else if (filmexp.test(q.pathname)){
+        console.log(q.pathname);
+        axios.all([
+            axios.get('http://localhost:3000' + q.pathname),
+            axios.get('http://localhost:3000/atores'),
+            axios.get('http://localhost:3000/generos')
+        ])
+        .then(axios.spread(function(filmResponse, castResponse, genreResponse) {
+            const filmData = filmResponse.data
+            const castData = castResponse.data
+            const genreData = genreResponse.data
+            const pagHTML = createFilm(filmData, castData, genreData)
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+            res.write(pagHTML);
+            res.end();
+        }))
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+    else if (q.pathname == '/atores'){
+        axios.get('http://localhost:3000/atores')
+        .then(function(response){
+            dados = response.data
+            pagHTML = createAtoresIndex(dados)
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            res.write(pagHTML)
+            res.end()
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+    }
+    else if (atorexp.test(q.pathname)){
+        console.log(q.pathname);
+        axios.all([
+            axios.get('http://localhost:3000' + q.pathname),
+            axios.get('http://localhost:3000/filmes'),
+        ])
+        .then(axios.spread(function(atorResponse, filmResponse) {
+            const atorData = atorResponse.data
+            const filmData = filmResponse.data
+            const pagHTML = createAtor(atorData, filmData)
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+            res.write(pagHTML);
+            res.end();
+        }))
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+    else if (q.pathname == '/generos'){
+        axios.get('http://localhost:3000/generos')
+        .then(function(response){
+            dados = response.data
+            pagHTML = createGenerosIndex(dados)
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            res.write(pagHTML)
+            res.end()
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+    }
+    else if (genreexp.test(q.pathname)){
+        console.log(q.pathname);
+        axios.all([
+            axios.get('http://localhost:3000' + q.pathname),
+            axios.get('http://localhost:3000/filmes'),
+        ])
+        .then(axios.spread(function(genreResponse, filmResponse) {
+            const genreData = genreResponse.data
+            const filmData = filmResponse.data
+            const pagHTML = createGenero(genreData, filmData)
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+            res.write(pagHTML);
+            res.end();
+        }))
+        .catch(function(error) {
+            console.log(error);
+        });
     }
     else{
         res.writeHead(400, {'Content-Type': 'text/html; charset=utf-8'})
